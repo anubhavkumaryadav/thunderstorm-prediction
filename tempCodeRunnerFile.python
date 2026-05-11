@@ -1,0 +1,44 @@
+import random
+import csv
+
+rows = []
+
+for i in range(10000):
+
+    # generate weather values
+    temperature = round(random.uniform(20, 40), 2)
+    humidity = round(random.uniform(40, 100), 2)
+    pressure = round(random.uniform(990, 1020), 2)
+    wind_speed = round(random.uniform(2, 30), 2)
+
+    # storm probability logic
+    storm_score = 0
+
+    if humidity > 75:
+        storm_score += 1
+
+    if pressure < 1005:
+        storm_score += 1
+
+    if temperature > 28:
+        storm_score += 1
+
+    if wind_speed > 12:
+        storm_score += 1
+
+    # thunderstorm decision
+    if storm_score >= 3:
+        thunderstorm = 1
+    else:
+        thunderstorm = 0
+
+    rows.append([temperature, humidity, pressure, wind_speed, thunderstorm])
+
+# save CSV
+with open("data.csv", "w", newline="") as file:
+    writer = csv.writer(file)
+
+    writer.writerow(["temperature","humidity","pressure","wind_speed","thunderstorm"])
+    writer.writerows(rows)
+
+print("Dataset generated: 10,000 rows")
