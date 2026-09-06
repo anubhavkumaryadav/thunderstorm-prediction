@@ -45,58 +45,11 @@ st.write(
 )
 
 tab1, tab2 = st.tabs(
-    ["1️⃣ Manual Input Prediction", "2️⃣ Live City Weather & Link"]
+    ["1️⃣ Live City Weather & Link", "2️⃣ Manual Input Prediction"]
 )
 
-# ==========================================
-# OPTION 1: MANUAL INPUT
-# ==========================================
 with tab1:
-    st.subheader("Option 1: Enter Weather Values Manually")
-
-    col1, col2 = st.columns(2)
-    with col1:
-        temp = st.number_input(
-            "Temperature (°C)", value=30.0, step=0.5, key="m_temp"
-        )
-        pressure = st.number_input(
-            "Pressure (hPa)", value=1005.0, step=1.0, key="m_press"
-        )
-    with col2:
-        humidity = st.number_input(
-            "Humidity (%)",
-            value=75.0,
-            step=1.0,
-            min_value=0.0,
-            max_value=100.0,
-            key="m_hum",
-        )
-        wind_speed = st.number_input(
-            "Wind Speed (km/h)", value=15.0, step=0.5, key="m_wind"
-        )
-
-    if st.button("Check Chances (Manual)", key="btn_manual"):
-        features = [[temp, humidity, pressure, wind_speed]]
-        prob = model.predict_proba(features)[0][1] * 100
-        prediction = model.predict(features)[0]
-
-        st.divider()
-        st.metric(
-            label="Calculated Thunderstorm Probability", value=f"{prob:.1f}%"
-        )
-        st.progress(int(prob))
-
-        if prob >= 50 or prediction == 1:
-            st.warning("⚡ High thunderstorm risk! Review precautions below:")
-            show_safety_guidelines()
-        else:
-            st.success("☀️ Low thunderstorm risk. Conditions appear clear!")
-
-# ==========================================
-# OPTION 2: LIVE CITY PREDICTION + DIRECT LINK
-# ==========================================
-with tab2:
-    st.subheader("Option 2: Live City Weather Detection")
+    st.subheader("Option 1: Live City Weather Detection")
 
     city = st.text_input(
         "Enter City Name:", value="Mumbai", placeholder="e.g. Mumbai, Delhi, Tokyo"
@@ -192,3 +145,44 @@ with tab2:
                     st.error(
                         f"Could not find '{clean_city}'. Check the spelling and try again."
                     )
+
+with tab2:
+    st.subheader("Option 2: Enter Weather Values Manually")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        temp = st.number_input(
+            "Temperature (°C)", value=30.0, step=0.5, key="m_temp"
+        )
+        pressure = st.number_input(
+            "Pressure (hPa)", value=1005.0, step=1.0, key="m_press"
+        )
+    with col2:
+        humidity = st.number_input(
+            "Humidity (%)",
+            value=75.0,
+            step=1.0,
+            min_value=0.0,
+            max_value=100.0,
+            key="m_hum",
+        )
+        wind_speed = st.number_input(
+            "Wind Speed (km/h)", value=15.0, step=0.5, key="m_wind"
+        )
+
+    if st.button("Check Chances (Manual)", key="btn_manual"):
+        features = [[temp, humidity, pressure, wind_speed]]
+        prob = model.predict_proba(features)[0][1] * 100
+        prediction = model.predict(features)[0]
+
+        st.divider()
+        st.metric(
+            label="Calculated Thunderstorm Probability", value=f"{prob:.1f}%"
+        )
+        st.progress(int(prob))
+
+        if prob >= 50 or prediction == 1:
+            st.warning("⚡ High thunderstorm risk! Review precautions below:")
+            show_safety_guidelines()
+        else:
+            st.success("☀️ Low thunderstorm risk. Conditions appear clear!")
